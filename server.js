@@ -13,29 +13,25 @@ const server = http.createServer((req, res) => {
     switch (route) {
         case '/':
             // For the root route, serve index.html
-            filePath = path.join(__dirname, 'index.html');
+            filePath = path.join(__dirname, 'views', 'index.html');
             break;
         case '/about':
             // For the /about route, serve about.html
-            filePath = path.join(__dirname, 'about.html');
+            filePath = path.join(__dirname, 'views', 'about.html');
             break;
         case '/contact':
             // For the /contact route, serve contact.html
-            filePath = path.join(__dirname, 'contact.html');
+            filePath = path.join(__dirname, 'views', 'contact.html');
             break;
         case '/products':
             // For the /products route, serve products.html
-            filePath = path.join(__dirname, 'products.html');
+            filePath = path.join(__dirname, 'views', 'products.html');
             break;
         case '/subscribe':
             // For the /subscribe route, serve subscribe.html
-            filePath = path.join(__dirname, 'subscribe.html');
+            filePath = path.join(__dirname, 'views', 'subscribe.html');
             break;
-        case '/login':
-            // For the /login route, implement a redirect to a login page (login.html)
-            res.writeHead(301, { 'Location': '/login.html' });
-            res.end();
-            return; // Exit early after redirecting
+            
         case '/status':
             // For the /status route, implement a custom status code and message
             res.writeHead(709, { 'Content-Type': 'text/plain' });
@@ -44,11 +40,11 @@ const server = http.createServer((req, res) => {
             return; // Exit early after sending the status response
         case '/checkout':
             // For the /checkout route, serve checkout.html
-            filePath = path.join(__dirname, 'checkout.html');
+            filePath = path.join(__dirname, 'views', 'checkout.html');
             break;
         case '/cart':
             // For the /cart route, serve cart.html
-            filePath = path.join(__dirname, 'cart.html');
+            filePath = path.join(__dirname, 'views', 'cart.html');
             break;
         default:
             // Handle unknown routes with a 404 Not Found response
