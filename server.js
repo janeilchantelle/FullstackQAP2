@@ -3,6 +3,20 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+// Function to write events to disk files
+function writeEventToLogFile(eventMessage) {
+    const currentDate = new Date();
+    const logFileName = `log_${currentDate.toISOString().slice(0, 10)}.txt`;
+    const logFilePath = path.join(__dirname, 'logs', logFileName);
+    const logEntry = `[${currentDate.toISOString()}] ${eventMessage}\n`;
+
+    fs.appendFile(logFilePath, logEntry, (err) => {
+        if (err) {
+            console.error(`Error writing to log file ${logFilePath}: ${err}`);
+        }
+    });
+}
+
 // Create the HTTP server
 const server = http.createServer((req, res) => {
     // Determine the requested route
@@ -36,7 +50,9 @@ const server = http.createServer((req, res) => {
             // For the /status route, implement a custom status code and message
             res.writeHead(709, { 'Content-Type': 'text/plain' });
             res.end("Hey Peter!");
-            console.log('Status: 709 Hey Peter!'); // Event emitter for custom status code access
+            const statusEventMessage = 'Status: 709 Hey Peter!';
+            console.log(statusEventMessage); // Event emitter for custom status code access
+            writeEventToLogFile(statusEventMessage); // Write event to log file
             return; // Exit early after sending the status response
         case '/checkout':
             // For the /checkout route, serve checkout.html
@@ -50,7 +66,9 @@ const server = http.createServer((req, res) => {
             // Handle unknown routes with a 404 Not Found response
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.end('404 Not Found');
-            console.log(`Event: Unknown Route Access - ${route}`); // Event emitter for unknown route access
+            const unknownRouteEventMessage = `Event: Unknown Route Access - ${route}`;
+            console.log(unknownRouteEventMessage); // Event emitter for unknown route access
+            writeEventToLogFile(unknownRouteEventMessage); // Write event to log file
             return; // Exit early
     }
 
@@ -60,12 +78,16 @@ const server = http.createServer((req, res) => {
             // Handle file read error
             res.writeHead(500, { 'Content-Type': 'text/plain' });
             res.end('500 Internal Server Error');
-            console.log(`Error: File Read Failed - ${filePath}`); // Event emitter for file read error
+            const fileReadErrorMessage = `Error: File Read Failed - ${filePath}`;
+            console.error(fileReadErrorMessage);
+            writeEventToLogFile(fileReadErrorMessage); // Write event to log file
         } else {
             // Serve the HTML content
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(content);
-            console.log(`Event: File Read Success - ${filePath}`); // Event emitter for successful file read
+            const fileReadSuccessMessage = `Event: File Read Success - ${filePath}`;
+            console.log(fileReadSuccessMessage); // Event emitter for successful file read
+            writeEventToLogFile(fileReadSuccessMessage); // Write event to log file
         }
     });
 });
@@ -83,5 +105,7 @@ server.listen(3000, () => {
     console.log('- /status (709 Hey Peter!)');
     console.log('- /checkout');
     console.log('- /cart');
-    console.log('Event: Server Start'); // Event emitter for server start
+    const serverStartEventMessage = 'Event: Server Start';
+    console.log(serverStartEventMessage); // Event emitter for server start
+    writeEventToLogFile(serverStartEventMessage); // Write event to log file
 });
