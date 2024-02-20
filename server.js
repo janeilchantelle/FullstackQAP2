@@ -10,6 +10,12 @@ function writeEventToLogFile(eventMessage) {
     const logFilePath = path.join(__dirname, 'logs', logFileName);
     const logEntry = `[${currentDate.toISOString()}] ${eventMessage}\n`;
 
+    // Create logs directory if it doesn't exist
+    const logsDirectory = path.join(__dirname, 'logs');
+    if (!fs.existsSync(logsDirectory)) {
+        fs.mkdirSync(logsDirectory);
+    }
+
     fs.appendFile(logFilePath, logEntry, (err) => {
         if (err) {
             console.error(`Error writing to log file ${logFilePath}: ${err}`);
@@ -45,7 +51,7 @@ const server = http.createServer((req, res) => {
             // For the /subscribe route, serve subscribe.html
             filePath = path.join(__dirname, 'views', 'subscribe.html');
             break;
-            
+
         case '/status':
             // For the /status route, implement a custom status code and message
             res.writeHead(709, { 'Content-Type': 'text/plain' });
