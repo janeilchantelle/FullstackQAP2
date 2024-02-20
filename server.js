@@ -28,7 +28,26 @@ const server = http.createServer((req, res) => {
     // Determine the requested route
     const route = req.url;
 
-    // Serve the appropriate HTML file based on the route
+    // Serve static files (CSS, JavaScript, etc.)
+    if (route.endsWith('.css')) {
+        // For CSS files, serve the file directly
+        const filePath = path.join(__dirname, 'views', route);
+        fs.readFile(filePath, (err, content) => {
+            if (err) {
+                // Handle file read error
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('500 Internal Server Error');
+                console.error(`Error reading CSS file: ${err}`);
+            } else {
+                // Serve the CSS content
+                res.writeHead(200, { 'Content-Type': 'text/css' });
+                res.end(content);
+            }
+        });
+        return; // Exit early
+    }
+
+    // Serve HTML files based on route
     let filePath;
     switch (route) {
         case '/':
@@ -51,7 +70,6 @@ const server = http.createServer((req, res) => {
             // For the /subscribe route, serve subscribe.html
             filePath = path.join(__dirname, 'views', 'subscribe.html');
             break;
-
         case '/status':
             // For the /status route, implement a custom status code and message
             res.writeHead(709, { 'Content-Type': 'text/plain' });
@@ -59,7 +77,7 @@ const server = http.createServer((req, res) => {
             const statusEventMessage = 'Status: 709 Hey Peter!';
             console.log(statusEventMessage); // Event emitter for custom status code access
             writeEventToLogFile(statusEventMessage); // Write event to log file
-            return; // Exit early after sending the status response
+            return; // Exit early
         case '/checkout':
             // For the /checkout route, serve checkout.html
             filePath = path.join(__dirname, 'views', 'checkout.html');
