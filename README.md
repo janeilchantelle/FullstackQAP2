@@ -14,6 +14,7 @@ To run this project locally, follow these steps:
 2. Navigate to the project directory.
 3. Install dependencies by running npm install.
 4. Start the server by running npm start.
+
 Usage
 
 Once the server is running, you can access different routes by navigating to the following URLs:
