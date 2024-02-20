@@ -36,7 +36,7 @@ const server = http.createServer((req, res) => {
             // For the /status route, implement a custom status code and message
             res.writeHead(709, { 'Content-Type': 'text/plain' });
             res.end("Hey Peter!");
-            console.log('Status: 709 Hey Peter!');
+            console.log('Status: 709 Hey Peter!'); // Event emitter for custom status code access
             return; // Exit early after sending the status response
         case '/checkout':
             // For the /checkout route, serve checkout.html
@@ -50,6 +50,7 @@ const server = http.createServer((req, res) => {
             // Handle unknown routes with a 404 Not Found response
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.end('404 Not Found');
+            console.log('Event: Unknown Route Access'); // Event emitter for unknown route access
             return; // Exit early
     }
 
@@ -63,6 +64,7 @@ const server = http.createServer((req, res) => {
             // Serve the HTML content
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(content);
+            console.log('Event: File Read Success'); // Event emitter for successful file read
         }
     });
 });
@@ -80,4 +82,5 @@ server.listen(3000, () => {
     console.log('- /status (709 Hey Peter!)');
     console.log('- /checkout');
     console.log('- /cart');
+    console.log('Event: Server Start'); // Event emitter for server start
 });
