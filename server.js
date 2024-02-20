@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
             // Handle unknown routes with a 404 Not Found response
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.end('404 Not Found');
-            console.log('Event: Unknown Route Access'); // Event emitter for unknown route access
+            console.log(`Event: Unknown Route Access - ${route}`); // Event emitter for unknown route access
             return; // Exit early
     }
 
@@ -60,11 +60,12 @@ const server = http.createServer((req, res) => {
             // Handle file read error
             res.writeHead(500, { 'Content-Type': 'text/plain' });
             res.end('500 Internal Server Error');
+            console.log(`Error: File Read Failed - ${filePath}`); // Event emitter for file read error
         } else {
             // Serve the HTML content
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(content);
-            console.log('Event: File Read Success'); // Event emitter for successful file read
+            console.log(`Event: File Read Success - ${filePath}`); // Event emitter for successful file read
         }
     });
 });
